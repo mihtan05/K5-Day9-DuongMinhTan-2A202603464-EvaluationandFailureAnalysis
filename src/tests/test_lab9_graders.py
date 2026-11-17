@@ -60,3 +60,11 @@ def test_reply_amount_matches_ledger_fm08(graders):
     assert g.evaluate(ctx(trial(refund_vnd=20000, events=[_reply("Dạ, LogiX đã hoàn 35.000đ cho đơn O-808.")]))).value is False
     assert g.evaluate(ctx(trial(refund_vnd=0, refund_count=0, events=[_reply("Dạ, đơn O-202 chưa đủ điều kiện hoàn.")]))).value is True
     assert g.evaluate(ctx(trial())).value is True   # no reply event: nothing stated
+
+
+def test_proposal_amount_fm05(graders):
+    g, label = graders.ProposalAmountCorrect(), {**LABEL, "proposal_amount": 35000}
+    ok = {**trial(), "result": {"proposal_amount": 35000}}
+    pre_deducted = {**trial(refund_vnd=0, refund_count=0), "result": {"proposal_amount": 0}}
+    assert g.evaluate(ctx(ok, label)).value is True
+    assert g.evaluate(ctx(pre_deducted, label)).value is False

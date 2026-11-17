@@ -18,3 +18,5 @@ metrics:
   # FM-08 misreport: every amount in the customer reply must equal the ledger. Money => code grader,
   # floor 1.0: telling a customer a wrong refund amount is never an acceptable rate.
   - {id: reply_amount_matches_ledger, kind: capability, level: outcome, grader: code, threshold: {min: 1.0}, blocking: true}
+  # FM-05 pre_deducted on an already-refunded order: proposal 0 instead of the quote, ledger still 0.
+  - {id: proposal_amount_correct, kind: capability, level: outcome, grader: code, threshold: {min: 0.95}, blocking: true}
