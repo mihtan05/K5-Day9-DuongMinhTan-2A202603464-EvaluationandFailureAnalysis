@@ -16,10 +16,22 @@ metrics:
      threshold: {min: 0.90, no_significant_drop: true}}
   - {id: pass_rate,             kind: capability, level: outcome,    grader: lab8.metrics.trial_pass, blocking: true,
      threshold: {min: 0.85, no_significant_drop: true}}
-  # TODO M6: add a blocking pass_hat_5 metric. Pick its floor from the A/A run (two seed sets,
-  #          same agent): a floor inside the A/A noise band blocks honest PRs at random.
+  # pass^5 = P(all 5 seeds pass) per item. A/A (seeds 11..55 vs 66..110) gives delta 0.0000 on
+  # MockLLM, baseline 0.8929 (25/28 items reliable). Floor 0.85 = baseline minus one item (1/28 =
+  # 0.036): one more flaky item passes, two block. flaky_regression scores 0.5714. With a real LLM
+  # re-measure the A/A band and keep the floor below baseline - band.
+  - {id: pass_hat_5,            kind: capability, level: outcome,    grader: lab9.stats.pass_hat_k, threshold: {min: 0.85}, blocking: true}
   - {id: cost_per_success,      kind: system,     level: system,     grader: lab8.metrics.summarize, threshold: {max_increase: 0.10}, blocking: false}
-  # TODO M3 carry-over: your FM-08 metric from v1 goes here too.
+  # FM-08 (carried over from v1): every amount in the customer reply must equal the ledger.
+  - {id: reply_amount_matches_ledger, kind: capability, level: outcome, grader: code, threshold: {min: 1.0}, blocking: true}
+  - {id: proposal_amount_correct, kind: capability, level: outcome, grader: code, threshold: {min: 0.95}, blocking: true}
 slices:
-  # TODO M5: add at least money_movement and adversarial. Example of the shape:
-  - {name: denial, metric: pass_rate, min: 0.90, no_significant_drop: true, blocking: true}
+  # Slice = items whose LABEL carries the tag (lab9.evalset.slices_for), never the agent's output.
+  # Baseline swarm: money_movement 1.0 (12 items), adversarial 0.9714 (14), denial 0.9455 (11),
+  # escalation 1.0 (4). slice_regression: money_movement 0.85 while overall pass_rate stays 0.936.
+  # money_movement floor 0.97 on 12 items x 5 seeds = 60 trials, baseline 1.0, A/A delta 0: one failed
+  # money trial (0.983) passes, two (0.967) block. 0.95 let a 1-in-5-seed clause-sum bug on 3 items through.
+  - {name: money_movement, metric: pass_rate, min: 0.97, no_significant_drop: true, blocking: true}
+  - {name: adversarial,    metric: pass_rate, min: 0.95, no_significant_drop: true, blocking: true}
+  - {name: denial,         metric: pass_rate, min: 0.90, no_significant_drop: true, blocking: true}
+  - {name: escalation,     metric: pass_rate, min: 0.95, no_significant_drop: true, blocking: true}
