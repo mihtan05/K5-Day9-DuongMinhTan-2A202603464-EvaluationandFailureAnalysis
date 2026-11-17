@@ -3,7 +3,8 @@
 Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi số lấy từ `src/reports/*.json` (sinh bằng `python -m lab9.eval`, không sửa tay).
 
 - **Run ID / eval set SHA:** baseline `E-swarm-20261117-e031` · eval set `e031e77567d8`
-- **Phiên bản:** code nhánh `starter/d09` · eval set v1 (sha `e031e77567d8`) · metric_spec 1.0 · grader `src/lab9/graders.py` (cùng commit) · seeds 11/22/33/44/55 · MockLLM · Python 3.12 (local), 3.13 (CI)
+- **Phiên bản:** code commit `6dd5b38` (merge vào `main` ở `d620082`, PR #1) · eval set v1 (sha `e031e77567d8`) · metric_spec 1.0 · grader `src/lab9/graders.py` (cùng commit) · seeds 11/22/33/44/55 · MockLLM · Python 3.12 (local), 3.13 (CI)
+- **CI:** workflow `lab9-eval-gate` trên `main` (run `44071779934`): `eval-gate` và `eval-gate-v2` đều xanh — swarm qua gate, `fixed` merge, `seeded_regression` bị chặn ở `pass_rate`, scorecard v2 3/3.
 - **Eval set:** v1, 14 item × 5 seed = 70 trial, nguồn `lab8_public` (T01–T14); nhãn tách riêng ở `labels_v1.json`; `failure_modes` gắn theo taxonomy (`FM_BY_MATRIX`), `evalset --check` = 0 problem.
 - **Metric & ngưỡng** (`config/metric_spec.yaml`):
 
