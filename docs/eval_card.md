@@ -3,7 +3,8 @@
 Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi số lấy từ `src/reports/*.json` (sinh bằng `python -m lab9.eval`, không sửa tay).
 
 - **Run ID / eval set SHA:** baseline `E-swarm-20261117-e031` · eval set `e031e77567d8`
-- **Phiên bản:** code nhánh `starter/d09` · eval set v1 (sha `e031e77567d8`) · metric_spec 1.0 · grader `src/lab9/graders.py` (cùng commit) · seeds 11/22/33/44/55 · MockLLM · Python 3.12 (local), 3.13 (CI)
+- **Phiên bản:** code commit `6dd5b38` (merge vào `main` ở `d620082`, PR #1) · eval set v1 (sha `e031e77567d8`) · metric_spec 1.0 · grader `src/lab9/graders.py` (cùng commit) · seeds 11/22/33/44/55 · MockLLM · Python 3.12 (local), 3.13 (CI)
+- **CI:** workflow `lab9-eval-gate` trên `main` (run `44071779934`): `eval-gate` và `eval-gate-v2` đều xanh — swarm qua gate, `fixed` merge, `seeded_regression` bị chặn ở `pass_rate`, scorecard v2 3/3.
 - **Eval set:** v1, 14 item × 5 seed = 70 trial, nguồn `lab8_public` (T01–T14); nhãn tách riêng ở `labels_v1.json`; `failure_modes` gắn theo taxonomy (`FM_BY_MATRIX`), `evalset --check` = 0 problem.
 - **Metric & ngưỡng** (`config/metric_spec.yaml`):
 
@@ -34,6 +35,7 @@ Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi s�
 
 - **Độ nhạy grader (M3):** `python -m lab9.mutation --detect` → detection 100% (20/20 trial fail `pass_rate` trên `seeded_regression` được ít nhất một grader khác giải thích), false alarms 0% trên `fixed`. Trước khi thêm `proposal_amount_correct` con số là 75%: 5 trial C-013 (FM-05 đề xuất 0, ledger vẫn đúng 0) không grader nào khác bắt. Ngoài ra 5 trial C-008 pass `pass_rate` nhưng fail `reply_amount_matches_ledger` (FM-08 mà grader Lab 8 không thấy).
 - **Judge:** tone_ok κ=0.757, P=0.857, R=0.800 → dùng, non-blocking. helpful κ=0.375, P=1.0, R=0.300 → **loại**: 18/21 ca bỏ sót là reply nói sai số tiền, judge không thấy ledger; việc đó giao cho grader code FM-08. Chi tiết `docs/judge_audit.md`.
+- **Bonus:** 3 grader port sang Inspect AI, khớp 1050/1050 quyết định với pydantic-evals — `docs/bonus_inspect.md`.
 - **Trace case:** `docs/trace_case.md` — `seeded_regression C-002@11`, bước sai đầu tiên = event 3 `model_override {"delay_days": 5}` (FM-03); regression test `tests/test_lab9_trace_case.py`.
 - **Gate owner:** Dương Minh Tân (eval owner). Gate exit 1 → không merge; người mở PR sửa agent, không sửa spec/report.
 - **Phạm vi pilot:** claim hoàn phí ship trễ và bồi thường hàng hỏng đã verify, 1 claim ↔ 1 đơn, tiền ≤ trần approval; kênh chat CS.
